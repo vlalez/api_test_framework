@@ -1,0 +1,59 @@
+import requests
+from utils.api_client import get,post,delete
+
+#Server is up and running
+def test_get_user_status_code():
+    response = get('/users')
+    print( f'Respond from server is:{response.status_code}')
+    assert response.status_code ==200
+
+#Response for users request is JSON and is not empty
+def test_get_users_response_structure():
+    response = get('/users')
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) > 0
+#First user has id, name and email fields
+    first_user = data[0]
+    assert "id" in first_user
+    assert "name" in first_user
+    assert "email" in first_user
+
+#A single user has attributes id==1, name and email
+def test_get_single_user():
+    response = get('/users/1')
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == 1
+    assert "name" in data
+    assert "email" in data
+
+#Create a new user using POST request:
+def test_create_user():
+    payload = {
+        "name": "John Tester",
+        "email": "john@test.com"
+    }
+    response = post('/users',payload)
+    assert response.status_code == 201
+    data = response.json()
+    assert data["name"] == payload['name']
+    assert data["email"] == payload['email']
+
+#Delete user with id=1
+def test_delete_user():
+    response = delete('/users/1')
+    assert response.status_code == 200
+
+#Negative test: request a non-existing user
+def test_get_non_existing_user():
+    response = get('/users/9999')
+    assert response.status_code == 404
+
+
+
+
+
+
+
