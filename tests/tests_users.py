@@ -1,37 +1,15 @@
 import requests
-
-#Base URL
-base_url = 'https://jsonplaceholder.typicode.com'
-
-#Request for receiving userlist using GET method
-def get_users()->list:
-    return requests.get(f'{base_url}/users')
-
-#Request to obtain a single user (GET):
-def get_single_user(user_id)->dict:
-    return requests.get(f"{base_url}/users/{user_id}")
-
-#Request to create a new user using POST method
-def create_user(payload)->None:
-    return requests.post(f"{base_url}/users", json=payload)
-
-#Request to delete user using DELETE method
-def delete_user(user_id):
-    return requests.delete(f"{base_url}/users/{user_id}")
-
-
-
-
+from utils.api_client import get,post,delete
 
 #Server is up and running
 def test_get_user_status_code():
-    response = get_users()
+    response = get('/users')
     print( f'Respond from server is:{response.status_code}')
     assert response.status_code ==200
 
 #Response for users request is JSON and is not empty
 def test_get_users_response_structure():
-    response = get_users()
+    response = get('/users')
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
@@ -44,7 +22,7 @@ def test_get_users_response_structure():
 
 #A single user has attributes id==1, name and email
 def test_get_single_user():
-    response = get_single_user(1)
+    response = get('/users/1')
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == 1
@@ -57,7 +35,7 @@ def test_create_user():
         "name": "John Tester",
         "email": "john@test.com"
     }
-    response = create_user(payload)
+    response = post('/users',payload)
     assert response.status_code == 201
     data = response.json()
     assert data["name"] == payload['name']
@@ -65,12 +43,12 @@ def test_create_user():
 
 #Delete user with id=1
 def test_delete_user():
-    response = delete_user(1)
+    response = delete('/users/1')
     assert response.status_code == 200
 
 #Negative test: request a non-existing user
 def test_get_non_existing_user():
-    response = get_single_user(9999)
+    response = get('/users/9999')
     assert response.status_code == 404
 
 
