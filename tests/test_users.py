@@ -1,4 +1,6 @@
 import requests
+import pytest
+import json
 from utils.api_client import get,post,delete
 
 #Server is up and running
@@ -51,6 +53,19 @@ def test_get_non_existing_user():
     response = get('/users/9999')
     assert response.status_code == 404
 
+#Reading JSON file:
+def load_test_data():
+    with open('data/users.json') as my_file:
+        return json.load(my_file)
+
+#Parameterized request:
+@pytest.mark.parametrize('user_data',load_test_data())
+def test_get_multiple_users(user_data):
+    response = get(f'/users/{user_data['id']}')
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == user_data['id']
+    assert "email" in data
 
 
 
