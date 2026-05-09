@@ -1,7 +1,13 @@
 import requests
 import pytest
 import json
+
+from jsonschema.exceptions import ValidationError
+
 from utils.api_client import get,post,delete
+from jsonschema import validate
+from schemas.user_schema import user_schema
+
 
 #Server is up and running
 def test_get_user_status_code():
@@ -27,9 +33,7 @@ def test_get_single_user():
     response = get('/users/1')
     assert response.status_code == 200
     data = response.json()
-    assert data["id"] == 1
-    assert "name" in data
-    assert "email" in data
+    validate(instance=data, schema=user_schema)
 
 #Create a new user using POST request:
 def test_create_user():
@@ -52,6 +56,14 @@ def test_delete_user():
 def test_get_non_existing_user():
     response = get('/users/9999')
     assert response.status_code == 404
+
+#Negative test: Check that invalid data is not matching JSON schema
+def test_invalid_schema():
+    invalid_data = {
+        "identififier" : 1
+    }
+    with pytest.raises(ValidationError):
+        validate(instance=invalid_data, schema=user_schema)
 
 #Reading JSON file:
 def load_test_data():
