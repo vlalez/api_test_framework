@@ -17,3 +17,8 @@ def post(endpoint:str,payload:dict)->None:
 def delete(endpoint:str)->None:
     '''Send DELETE request to API enpont with payload'''
     return requests.delete(f"{base_url}{endpoint}")
+
+#PUT method
+def put(endpoint, payload:str)->None:
+    '''Send PUT request to API enpont with payload'''
+    return requests.put(f'{base_url}{endpoint}',json=payload)
