@@ -4,7 +4,7 @@ import json
 
 from jsonschema.exceptions import ValidationError
 
-from utils.api_client import get,post,delete
+from utils.api_client import get,post,delete,put
 from jsonschema import validate
 from schemas.user_schema import user_schema
 
@@ -78,6 +78,20 @@ def test_get_multiple_users(user_data):
     data = response.json()
     assert data["id"] == user_data['id']
     assert "email" in data
+
+#Update existing user
+def test_update_user():
+    payload = {
+        'id':1,
+        "name": "Updated user",
+        "email": "updated@test.com"
+    }
+    response = put('/users/1',payload)
+    assert response.status_code == 200
+    data = response.json()
+    print (data)
+    assert data["name"] == payload['name']
+    assert data["email"] == payload['email']
 
 
 
