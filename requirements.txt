@@ -2,4 +2,3 @@ pytest
 requests
 jsonschema
 pytest-html
-test
