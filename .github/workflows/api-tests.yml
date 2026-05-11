@@ -29,4 +29,10 @@ jobs:
         run: |
           pwd
           ls -R
-          pytest -v
+          pytest -v --html=report.html
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: report.html
