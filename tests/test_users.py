@@ -10,7 +10,7 @@ from config.config import TEST_ENV
 
 #Check the environment
 def test_environment():
-    assert TEST_ENV == 'staging'
+    assert TEST_ENV == 'test'
 
 #Server is up and running
 def test_get_user_status_code():
