@@ -3,11 +3,14 @@ import pytest
 import json
 
 from jsonschema.exceptions import ValidationError
-
 from utils.api_client import get,post,delete,put
 from jsonschema import validate
 from schemas.user_schema import user_schema
+from config.config import TEST_ENV
 
+#Check the environment
+def test_environment():
+    assert TEST_ENV == 'staging'
 
 #Server is up and running
 def test_get_user_status_code():
