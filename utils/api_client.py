@@ -1,7 +1,8 @@
 import requests
+from config.config import base_url
 
 #Base URL
-base_url = 'https://jsonplaceholder.typicode.com'
+#base_url = 'https://jsonplaceholder.typicode.com'
 
 #GET method
 def get(endpoint:str)->list:
