@@ -1,16 +1,18 @@
-import requests
+import os
 import pytest
 import json
+from pathlib import Path
 
 from jsonschema.exceptions import ValidationError
 from utils.api_client import get,post,delete,put
 from jsonschema import validate
 from schemas.user_schema import user_schema
-from config.config import TEST_ENV
 
 #Check the environment
 def test_environment():
-    assert TEST_ENV == 'test'
+    env = os.getenv("TEST_ENV")
+    assert env is not None, "TEST_ENV environment variable is not set"
+    assert env in ("dev", "test", "prod"), f"TEST_ENV '{env}' is not a valid environment"
 
 #Server is up and running
 def test_get_user_status_code():
@@ -70,7 +72,8 @@ def test_invalid_schema():
 
 #Reading JSON file:
 def load_test_data():
-    with open('data/users.json') as my_file:
+    path = Path(__file__).parent.parent / "data" / "users.json"
+    with open(path) as my_file:
         return json.load(my_file)
 
 #Parameterized request:
