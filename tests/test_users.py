@@ -7,12 +7,11 @@ from jsonschema.exceptions import ValidationError
 from utils.api_client import get,post,delete,put
 from jsonschema import validate
 from schemas.user_schema import user_schema
+from config.config import TEST_ENV
 
 #Check the environment
 def test_environment():
-    env = os.getenv("TEST_ENV")
-    assert env is not None, "TEST_ENV environment variable is not set"
-    assert env in ("dev", "test", "prod"), f"TEST_ENV '{env}' is not a valid environment"
+    assert TEST_ENV == 'test'
 
 #Server is up and running
 def test_get_user_status_code():
