@@ -1,7 +1,7 @@
 import requests
 from config.config import base_url
 
-TIMEOUT = 10
+TIMEOUT = 30
 
 
 def get(endpoint: str) -> requests.Response:
